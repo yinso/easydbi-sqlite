@@ -1,9 +1,8 @@
 #!/usr/bin/env coffee # -*- coffee-script -*- -p
 DBI = require 'easydbi'
-P = require 'easydbi/src/promise'
+Promise = require 'bluebird'
 require '../src/sqlite3'
 assert = require 'assert'
-async = require 'async'
 path = require 'path'
 fs = require 'fs'
 loglet = require 'loglet'
@@ -40,64 +39,39 @@ describe 'sqlite driver test', () ->
       done e
 
   it 'can create/insert/select', (done) ->
-    P.make()
-      .then (cb) ->
-        db.createTest {}, cb
-      .then (cb) ->
-        db.exec 'insert into test_t values ($c1, $c2)', {c1: 1, c2: 2}, cb
-      .then (cb) ->
-        db.insertTest {c1:3, c2:4}, cb
-      .then (cb) ->
-        db.selectTest {}, cb
-      .then (rows, cb) ->
-        try 
-          assert.deepEqual rows, [{c1: 1, c2: 2}, {c1: 3, c2: 4}]
-          cb null 
-        catch e
-          cb e
-      .catch (err) ->
-        done err
-      .done () ->
+    db.createTestAsync({})
+      .then ->
+        db.execAsync 'insert into test_t values ($c1, $c2)', {c1: 1, c2: 2}
+      .then ->
+        db.insertTestAsync {c1:3, c2:4}
+      .then ->
+        db.selectTestAsync {}
+      .then (rows) ->
+        assert.deepEqual rows, [{c1: 1, c2: 2}, {c1: 3, c2: 4}]
         done null
-  
-  it 'can have concurrent connections', 10000, (done) ->
-    helper = (count, next) ->
-      conn = null
-      P.make()
-        .then (cb) ->
-          DBI.connect 'test', (err, c) ->
-            if err
-              cb err
-            else
-              conn = c
-              cb null
-        .then (cb) ->
-          conn.insertTest {c1:2, c2:4}, cb
-        .then (cb) ->
-          conn.selectTest {}, cb
-        .catch (err) ->
-          conn.disconnect (e) ->
-            next err
-        .done () ->
-          conn.disconnect next 
+      .catch done
+  it 'can have concurrent connections', (done) ->
+    this.timeout(20000)
+    helper = (count) ->
+      DBI.connectAsync('test')
+        .then (conn) ->
+          conn.insertTestAsync({c1:2, c2:4})
+            .then ->
+              conn.selectTestAsync {}
+            .then (rows) ->
+              conn.disconnectAsync()
+                .then ->
+                  rows
     list = [1, 2, 3, 4, 5, 6, 7]
-    async.each list, helper, (err) ->
-      loglet.debug 'async.last', err
-      if err
-        done err
-      else
-        P.make()
-          .then (cb) ->
-            db.selectTest {}, cb
-          .then (rows, cb) ->
-            try
-              assert.equal rows.length, list.length + 2
-              cb null
-            catch e
-              cb e
-          .catch(done)
-          .done(done)
-    
+    Promise.map(list, helper)
+      .then (results) ->
+        db.selectTestAsync({})
+      .then (rows) ->
+        assert.equal rows.length, list.length + 2
+      .then ->
+        done null
+      .catch done
+
   it 'clean up', (done) ->
     fs.unlink path.join(__dirname, '..', 'example', 'test.db'), done
     
