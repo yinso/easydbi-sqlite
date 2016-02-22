@@ -4,6 +4,7 @@ DBI = require 'easydbi'
 Driver = require 'easydbi/lib/driver'
 queryHelper = require 'easydbi/lib/query'
 loglet = require 'loglet'
+Errorlet = require 'errorlet'
 
 class Sqlite3Driver extends Driver
   @pool = false
