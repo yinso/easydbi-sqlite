@@ -41,7 +41,7 @@ describe 'sqlite driver test', () ->
   it 'can create/insert/select', (done) ->
     db.createTestAsync({})
       .then ->
-        db.execAsync 'insert into test_t values ($c1, $c2)', {c1: 1, c2: 2}
+        db.execAsync 'insert into test_t (c1, c2) values ($c1, $c2)', {c1: 1, c2: 2}
       .then ->
         db.insertTestAsync {c1:3, c2:4}
       .then ->

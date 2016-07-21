@@ -32,36 +32,25 @@ class Sqlite3Driver extends Driver
     val = @inner instanceof sqlite3.Database
     loglet.debug "#{@driverName()}.isConnected", val
     val
-  query: (stmt, args, cb) ->
-    if arguments.length == 2
-      cb = args
-      args = {}
+  innerQuery: (stmt, args, cb) ->
     try
       [ normedStmt, normedArgs ] = queryHelper.arrayify stmt, args
       @inner.all normedStmt, normedArgs, cb
     catch e
       cb e
-  _exec: (stmt, args, cb) ->
+  innerExec: (stmt, args, cb) ->
     self = @
     waitCallback = () ->
-      self._exec stmt, args, cb
-    @inner.run stmt, args, (err, res) ->
+      self.innerExec stmt, args, cb
+    [ normedStmt, normedArgs ] = queryHelper.arrayify stmt, args
+    @inner.run normedStmt, normedArgs, (err, res) ->
       if err?.code == 'SQLITE_BUSY'
         setTimeout waitCallback, self.options?.timeout or 500
       else
         cb err
-  exec: (stmt, args, cb) ->
-    if arguments.length == 2
-      cb = args
-      args = {}
-    try
-      [ stmt, args ] = queryHelper.arrayify stmt, args
-      @_exec stmt, args, cb
-    catch e
-      cb e
-  disconnect: (cb) ->
+  innerDisconnect: (cb) ->
     @inner.close cb
-  close: (cb) ->
+  innerClose: (cb) ->
     @inner.close cb
 
 DBI.register 'sqlite', Sqlite3Driver
