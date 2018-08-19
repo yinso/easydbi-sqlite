@@ -16,7 +16,7 @@ export class Sqlite3Driver extends DBI.Driver {
     }
 
     makeConnectionString(options : SqliteOptions) : string {
-        console.log('***** Sqlite3Driver.makeConnectionString', options);
+        //console.log('***** Sqlite3Driver.makeConnectionString', options);
         if (options.memory) {
             return ':memory'
         } else if (options.filePath) {
@@ -28,7 +28,7 @@ export class Sqlite3Driver extends DBI.Driver {
 
     connectAsync() : Promise<Sqlite3Driver> {
         return new Promise<Sqlite3Driver>((resolve, reject) => {
-            console.log('**** Sqlite3Driver.connectAsync', this.connection)
+            //console.log('**** Sqlite3Driver.connectAsync', this.connection)
             this._inner = new sqlite3.Database(this.connection, (err) => {
                 if (err) {
                     reject(err)
