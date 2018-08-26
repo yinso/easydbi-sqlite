@@ -13,23 +13,23 @@ var mocha_typescript_1 = require("mocha-typescript");
 var assert = require("assert");
 var sql = require("../lib/sqlite3-driver");
 var conn;
-var SqlJsTest = /** @class */ (function () {
-    function SqlJsTest() {
+var Sqlite3DriverTest = /** @class */ (function () {
+    function Sqlite3DriverTest() {
     }
-    SqlJsTest.prototype.canConnect = function () {
+    Sqlite3DriverTest.prototype.canConnect = function () {
         conn = new sql.Sqlite3Driver('test', {
             filePath: ':memory:'
         });
         return conn.connectAsync();
     };
-    SqlJsTest.prototype.canCreateTable = function () {
+    Sqlite3DriverTest.prototype.canCreateTable = function () {
         return conn.execAsync('create table test(c1 int, c2 int)')
             .then(function () { return conn.queryAsync('select * from test'); });
     };
-    SqlJsTest.prototype.canInsert = function () {
+    Sqlite3DriverTest.prototype.canInsert = function () {
         return conn.execAsync('insert into test values (1, 2), (3, 4)');
     };
-    SqlJsTest.prototype.canSelect = function () {
+    Sqlite3DriverTest.prototype.canSelect = function () {
         return conn.queryAsync('select * from test')
             .then(function (records) {
             assert.deepEqual([
@@ -44,7 +44,7 @@ var SqlJsTest = /** @class */ (function () {
             ], records);
         });
     };
-    SqlJsTest.prototype.canGetSchema = function () {
+    Sqlite3DriverTest.prototype.canGetSchema = function () {
         return conn.queryAsync('select * from sqlite_master', {})
             .then(function (results) {
             assert.deepEqual([
@@ -58,7 +58,7 @@ var SqlJsTest = /** @class */ (function () {
             ], results);
         });
     };
-    SqlJsTest.prototype.canDisconnect = function () {
+    Sqlite3DriverTest.prototype.canDisconnect = function () {
         return conn.disconnectAsync();
     };
     __decorate([
@@ -66,40 +66,40 @@ var SqlJsTest = /** @class */ (function () {
         __metadata("design:type", Function),
         __metadata("design:paramtypes", []),
         __metadata("design:returntype", void 0)
-    ], SqlJsTest.prototype, "canConnect", null);
+    ], Sqlite3DriverTest.prototype, "canConnect", null);
     __decorate([
         mocha_typescript_1.test,
         __metadata("design:type", Function),
         __metadata("design:paramtypes", []),
         __metadata("design:returntype", void 0)
-    ], SqlJsTest.prototype, "canCreateTable", null);
+    ], Sqlite3DriverTest.prototype, "canCreateTable", null);
     __decorate([
         mocha_typescript_1.test,
         __metadata("design:type", Function),
         __metadata("design:paramtypes", []),
         __metadata("design:returntype", void 0)
-    ], SqlJsTest.prototype, "canInsert", null);
+    ], Sqlite3DriverTest.prototype, "canInsert", null);
     __decorate([
         mocha_typescript_1.test,
         __metadata("design:type", Function),
         __metadata("design:paramtypes", []),
         __metadata("design:returntype", void 0)
-    ], SqlJsTest.prototype, "canSelect", null);
+    ], Sqlite3DriverTest.prototype, "canSelect", null);
     __decorate([
         mocha_typescript_1.test,
         __metadata("design:type", Function),
         __metadata("design:paramtypes", []),
         __metadata("design:returntype", void 0)
-    ], SqlJsTest.prototype, "canGetSchema", null);
+    ], Sqlite3DriverTest.prototype, "canGetSchema", null);
     __decorate([
         mocha_typescript_1.test,
         __metadata("design:type", Function),
         __metadata("design:paramtypes", []),
         __metadata("design:returntype", void 0)
-    ], SqlJsTest.prototype, "canDisconnect", null);
-    SqlJsTest = __decorate([
+    ], Sqlite3DriverTest.prototype, "canDisconnect", null);
+    Sqlite3DriverTest = __decorate([
         mocha_typescript_1.suite
-    ], SqlJsTest);
-    return SqlJsTest;
+    ], Sqlite3DriverTest);
+    return Sqlite3DriverTest;
 }());
 //# sourceMappingURL=sqlite3-driver.js.map

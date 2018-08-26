@@ -8,3 +8,5 @@ repos/
 .sass-cache/
 css/*.css
 .idea/
+run/
+

@@ -6,7 +6,7 @@ import * as sql from '../lib/sqlite3-driver';
 
 var conn : sql.Sqlite3Driver;
 
-@suite class SqlJsTest {
+@suite class Sqlite3DriverTest {
     @test
     canConnect() {
         conn = new sql.Sqlite3Driver('test', {
