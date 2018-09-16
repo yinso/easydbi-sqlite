@@ -9,7 +9,7 @@ export interface SqliteOptions extends DBI.DriverOptions {
 
 export class Sqlite3Driver extends DBI.Driver {
     private readonly connection : string;
-    private _inner : sqlite3.Database;
+    private _inner !: sqlite3.Database;
     constructor(key : string, options : SqliteOptions) {
         super(key, options);
         this.connection = this.makeConnectionString(options)
