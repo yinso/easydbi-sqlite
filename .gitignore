@@ -9,4 +9,4 @@ repos/
 css/*.css
 .idea/
 run/
-
+.vscode/

@@ -35,6 +35,6 @@
     "fs-extra-promise": "^1.0.1",
     "mocha": "^2.5.3",
     "mocha-typescript": "^1.1.17",
-    "typescript": "^3.0.1"
+    "typescript": "^3.0.3"
   }
 }
