@@ -4,10 +4,11 @@ export interface SqliteOptions extends DBI.DriverOptions {
     memory?: boolean;
     filePath?: string;
 }
+export declare function isSqliteOptions(v: any): v is SqliteOptions;
 export declare class Sqlite3Driver extends DBI.Driver {
     private readonly connection;
     private _inner;
-    constructor(key: string, options: SqliteOptions);
+    constructor(key: string, options: DBI.DriverOptions);
     makeConnectionString(options: SqliteOptions): string;
     connectAsync(): Promise<Sqlite3Driver>;
     isConnected(): boolean;

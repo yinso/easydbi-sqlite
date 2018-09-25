@@ -6,13 +6,20 @@ export interface SqliteOptions extends DBI.DriverOptions {
     memory ?: boolean;
     filePath ?: string;
 }
+export function isSqliteOptions(v : any) : v is SqliteOptions {
+    return DBI.isDriverOptions(v) && ((v as any).memory ? typeof(v.memory) === 'boolean' : true) && ((v as any).filePath ? typeof(v.filePath) === 'string' : true);
+}
 
 export class Sqlite3Driver extends DBI.Driver {
     private readonly connection : string;
     private _inner !: sqlite3.Database;
-    constructor(key : string, options : SqliteOptions) {
+    constructor(key : string, options : DBI.DriverOptions) {
         super(key, options);
-        this.connection = this.makeConnectionString(options)
+        if (isSqliteOptions(options)) {
+            this.connection = this.makeConnectionString(options)
+        } else {
+            throw new Error(`InvalidSqliteDriverOptions`);
+        }
     }
 
     makeConnectionString(options : SqliteOptions) : string {
