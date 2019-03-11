@@ -66,12 +66,12 @@ DBI.setup('test-serialize', {
         driverOptions: {
             filePath: ':memory:'
         },
-        outputDir: outputDir
+        outputDir: outputDir,
+        pool: {
+            min: 1,
+            max: 1
+        }
     },
-    pool: {
-        min: 1,
-        max: 1
-    }
 })
 
 @suite
