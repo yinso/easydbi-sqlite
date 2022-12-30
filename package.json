@@ -28,7 +28,7 @@
     "chai": "^4.2.0",
     "easydbi": "git+https://git@github.com/yinso/easydbi.git#master",
     "fs-extra-promise": "^1.0.1",
-    "mocha": "^6.0.2",
+    "mocha": "^10.2.0",
     "mocha-typescript": "^1.1.17",
     "source-map-support": "^0.5.10",
     "typescript": "^3.0.3"
